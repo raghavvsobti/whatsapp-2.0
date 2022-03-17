@@ -5,7 +5,6 @@ import { Button } from "@material-ui/core";
 
 function Login() {
   const signIn = () => {
-    // auth.signInWithPopop(provider).catch(alert);
     auth.signInWithPopup(provider).catch(alert);
   };
 
@@ -17,7 +16,6 @@ function Login() {
       <LoginContainer>
         <Logo src="http://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c543.png" />
         <Button onClick={signIn} variant="outlined">
-          {" "}
           Sign in with Google
         </Button>
       </LoginContainer>
