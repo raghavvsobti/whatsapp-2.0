@@ -9,15 +9,17 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import MicIcon from "@material-ui/icons/Mic";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Message from "./Message";
 import getRecepientEmail from "../utils/getRecepientEmail";
 import TimeAgo from "timeago-react";
+import firebase from "firebase/compat/app";
 
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const [input, setInput] = useState("");
   const router = useRouter();
+  const endOfMessagesRef = useRef(null);
   const [messagesSnapshot] = useCollection(
     db
       .collection("chats")
@@ -51,7 +53,14 @@ function ChatScreen({ chat, messages }) {
     }
   };
 
-  const sendMessage = () => {
+  const scrollToBottom = () => {
+    endOfMessagesRef?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const sendMessage = (e) => {
     e.preventDefault();
 
     db.collection("users").doc(user.uid).set(
@@ -69,6 +78,7 @@ function ChatScreen({ chat, messages }) {
     });
 
     setInput("");
+    scrollToBottom();
   };
 
   const recepient = recepientSnapshot?.docs?.[0]?.data();
@@ -111,16 +121,20 @@ function ChatScreen({ chat, messages }) {
       <MessageContainer>
         {showMessages()}
 
-        <EndOfMessage />
+        <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
       <InputContainer>
         <InsertEmoticonIcon />
-        <Input value={input} onChange={(e) => e.target.value} />
+        <Input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          type="text"
+        />
         <button
           hidden
           disabled={!input}
           type="submit"
-          onClick={() => sendMessage()}
+          onClick={(e) => sendMessage(e)}
         >
           Send Message
         </button>
@@ -181,6 +195,10 @@ const HeaderInformation = styled.div`
   }
 `;
 
+const EndOfMessage = styled.div`
+  margin-bottom: 50px;
+`;
+
 const HeaderIcons = styled.div``;
 
 const MessageContainer = styled.div`
@@ -188,4 +206,3 @@ const MessageContainer = styled.div`
   background-color: #e5ded8;
   min-height: 90vh;
 `;
-const EndOfMessage = styled.div``;
