@@ -6,7 +6,7 @@ import { Button } from "@material-ui/core";
 function Login() {
   const signIn = () => {
     // auth.signInWithPopop(provider).catch(alert);
-    auth.signInWithPopop(provider).catch(alert);
+    auth.signInWithPopup(provider).catch(alert);
   };
 
   return (

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { auth, db } from "../firebase";
 import Login from "./login";
 import Loading from "../Components/Loading";
-import firebase from 'firebase/compat/app';
+import firebase from "firebase/compat/app";
 // import 'firebase/compat/auth';
 // import 'firebase/compat/firestore';
 
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
       db.collection("users").doc(user.uid).set(
         {
           email: user.email,
-          lastSeen: firebase.firestore.Fieldvalue.serverTimestamp(),
+          lastSeen: firebase?.firestore?.FieldValue?.serverTimestamp(),
           photoURL: user.photoURL,
         },
         {
